@@ -1,0 +1,14 @@
+#compdef hm
+_arguments \
+  '(-h --help)'{-h,--help}'[show help]' \
+  '--no-new-shell[do not re-exec login shell]' \
+  '1:cmd:(config flake)' \
+  '2:arg:->args'
+
+case $state in
+  args)
+    if [[ $words[2] == (config|flake) ]]; then
+      _arguments '-C[config file]:file:_files'
+    fi
+  ;;
+esac
