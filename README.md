@@ -30,6 +30,7 @@ Simple defaults, no assumptions
 
 Usage summary
 
+`hm`                   # Alias for `hm switch`
 `hm switch`            # Apply config, reload shell
 `hm apply`             # Apply without generation switch
 `hm config [-C FILE]`  # Edit home.nix (or FILE)
