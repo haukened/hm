@@ -30,6 +30,33 @@
       };
     });
 
+    # Home Manager module so others can do: programs.hm.enable = true;
+    homeManagerModules.hm = { lib, config, pkgs, ... }:
+      let
+        cfg = config.programs.hm;
+      in {
+        options.programs.hm = {
+          enable = lib.mkEnableOption "the hm helper CLI";
+          package = lib.mkOption {
+            type = lib.types.package;
+            default = self.packages.${pkgs.system}.default;
+            description = "Which hm package to install.";
+          };
+          createAlias = lib.mkOption {
+            type = lib.types.bool;
+            default = true;
+            description = "Add 'hm' alias to shells.";
+          };
+        };
+
+        config = lib.mkIf cfg.enable {
+          home.packages = [ cfg.package ];
+          programs.bash.shellAliases = lib.mkIf cfg.createAlias { hm = "hm"; };
+          programs.zsh.shellAliases  = lib.mkIf cfg.createAlias { hm = "hm"; };
+          # Add other shells here if you like (fish, etc.).
+        };
+      };
+
     # optional formatter for `nix fmt`
     formatter = forAll (system: pkgs: pkgs.nixfmt-rfc-style);
   };
